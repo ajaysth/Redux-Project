@@ -3,6 +3,7 @@ import type { RootState } from "../redux/store"
 import { fetchPhotos, fetchVideos, fetchGifs } from "../api/mediaApi"
 import { useEffect } from "react";
 import { setError, setLoading, setResults } from "../redux/feature/searchSlice";
+import ResultCard from "./ResultCard";
 
 type Photo = {
     id: string;
@@ -91,7 +92,7 @@ const ResultGrid = () => {
                         type: "video",
                         title: item.user.name,
                         thumbnail: item.image,
-                        url: item.video_files[0]
+                        url: item.video_files[0].link
                     }))
                 }
                 if (activeTab == "gifs") {
@@ -107,6 +108,9 @@ const ResultGrid = () => {
                 dispatch(setResults(data))
             } catch (err) {
                 dispatch(setError(err))
+            } finally {
+                console.log(data);
+
             }
 
 
@@ -121,9 +125,9 @@ const ResultGrid = () => {
 
 
     return (
-        <div>
-            {results.map((item, id) => {
-                return <h1 key={id}>{item.title}</h1>
+        <div className="flex flex-wrap gap-5 w-full mt-5 overflow-auto justify-center p-5">
+            {results.map((item) => {
+                return <ResultCard item={item} />
             })}
 
         </div>
